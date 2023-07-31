@@ -26,6 +26,7 @@ async function generateProvinsi (page) {
     }
 
     console.log('[#] Generating Province Data - Successful')
+    await fs.writeFile('./assets/province.json', JSON.stringify(result, null, 2), 'utf8');
     return result;
 };
 
@@ -56,6 +57,7 @@ async function generateKota (page, provinsi) {
     }
 
     console.log('[#] Generating City Data - Successful')
+    await fs.writeFile('./assets/city.json', JSON.stringify(provinsi, null, 2), 'utf8');
     return provinsi;
 }
 
@@ -88,6 +90,7 @@ async function generateKecamatan (page, kota) {
     }
 
     console.log('[#] Generating Subdistrict Data - Successful')
+    await fs.writeFile('./assets/subdistrict.json', JSON.stringify(kota, null, 2), 'utf8');
     return kota;
 }
 
@@ -123,6 +126,8 @@ async function generateKelurahan (page, kecamatan) {
     }
 
     console.log('[#] Generating Village Data - Successful')
+    await fs.writeFile('./assets/village.json', JSON.stringify(kecamatan, null, 2), 'utf8');
+
     return kecamatan;
 }
 
@@ -135,7 +140,7 @@ const generateKodePos = () => new Promise (async (resolve, reject) => {
 
     var url = 'https://kodepos.nomor.net/_kodepos.php?_i=provinsi-kodepos';
     const page = await browser.newPage();
-    await page.setDefaultNavigationTimeout(60000);
+    await page.setDefaultNavigationTimeout(90000);
     await page.goto(url);
 
     var provinsi = await generateProvinsi(page);
@@ -149,5 +154,5 @@ const generateKodePos = () => new Promise (async (resolve, reject) => {
 
 (async () => {
     var result = await generateKodePos();
-    await fs.writeFile('./data.json', JSON.stringify(result, null, 2), 'utf8');
+    // await fs.writeFile('./data.json', JSON.stringify(result, null, 2), 'utf8');
 })();
